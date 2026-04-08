@@ -3,29 +3,31 @@ const cors = require("cors");
 const mongoose = require("mongoose");
 require("dotenv").config();
 
+// 2
 const app = express();
+
+// 3
 app.use(cors());
 app.use(express.json());
 
-// الاتصال بقاعدة البيانات (اختياري حالياً)
-// mongoose.connect(process.env.MONGODB_URI);
+// 4
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log(" Connected to MongoDB"))
+  .catch((err) => console.log(" DB Connection Error:", err));
 
-// مسار استقبال بيانات المشتركين
+// 5
 app.post("/api/register", (req, res) => {
-  // استقبال الاسم ورقم الجوال من الواجهة
   const { name, phone } = req.body;
 
-  console.log(`🎉 تم استلام طلب اشتراك جديد!`);
-  console.log(`الاسم: ${name} | الجوال: ${phone}`);
-
-  // هنا يتم الحفظ في قاعدة البيانات لاحقاً
-  res
-    .status(200)
-    .json({
-      success: true,
-      message: "تم استلام طلبك وسيتواصل معك فريق أورا قريباً!",
-    });
+  res.status(200).json({
+    success: true,
+    message: "success!",
+  });
 });
 
+// 6
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`🚀 السيرفر يعمل على المنفذ ${PORT}`));
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
